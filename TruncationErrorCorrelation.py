@@ -200,11 +200,39 @@ for i, j in zip(trunc_data, low_data):
     # stores the correlation coefficients for error recombination later
     Rvalues.append(np.divide(np.mean(np.multiply(np.subtract(j, lo_mean), np.subtract(i, ho_mean))), ho_std*lo_std))
 
+
+# saveData - saves a 2D or higher array to a file.
+#     filename - the name of the file you wish to create
+#     data     - the array of data you wish to save
+#     sig      - the number of significant figures after the decimal point (always Scientific Notation)
+# returns  - creates a datafile with the values in columns, non-csv (whitespace delimiter)
+def saveData(filename: str, data: list, sig: int):
+    columns = len(data)
+    print(columns)
+    if(columns < 2):
+        raise Exception("Saving a 1 column (# of columns = " + columns + ") array. Save aborted.")
+    else:
+
+        stringformat = ""
+        for i in range(columns):
+            stringformat += "{" + str(i) + ":" + str(sig) + "e}" + "\t"
+        
+        values = len(data[0])
+        file = open(filename, 'w')
+        for i in range(values):
+            file.write(stringformat.format(*[data[v][i] for v in range(columns)]))
+            if (i != (values - 1)):
+                file.write("\n")
+
+    file.close()
+
+    return
+    
 print("Saving data...")
-pf.saveData(savedir + "prediction.dat", [domain, prediction, prediction_error], sig=8)
-pf.saveData(savedir + "truncation_prediction.dat", [domain, trunc_pred, ho_std_array], sig=8)
-pf.saveData(savedir + "lower_order_prediction.dat", [domain, low_pred, lo_std_array], sig=8)
-pf.saveData(savedir + "correlation.dat", [domain, Rvalues], sig=8)
+saveData(savedir + "prediction.dat", [domain, prediction, prediction_error], sig=8)
+saveData(savedir + "truncation_prediction.dat", [domain, trunc_pred, ho_std_array], sig=8)
+saveData(savedir + "lower_order_prediction.dat", [domain, low_pred, lo_std_array], sig=8)
+saveData(savedir + "correlation.dat", [domain, Rvalues], sig=8)
 print(f"{'\033[92m'}SUCCESS{'\033[0m'}")
 
 # -----------------------------------------------------------------------------------------------
@@ -458,3 +486,4 @@ plt.close()
 #create_figure9()
 
 # -----------------------------------------------------------------------------------------------
+

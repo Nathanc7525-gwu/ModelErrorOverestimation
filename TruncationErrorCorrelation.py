@@ -8,7 +8,6 @@
 #  Imports -----------------------------
 import numpy as np
 import matplotlib.pyplot as plt
-import personal.functions as pf
 import time
 import emcee
 from math import exp, log
@@ -22,8 +21,24 @@ savedir = "./"
 
 #  -------------------------------------
 #  PULLING DATA FROM DATAFILE
+
+# getData - pulls from a file any number of columns of numerical data
+#     filename - the name of the file you are pulling from
+#     columns - a 1D array of ints, the number, from left to right, of columns you want
+# returns - a 2-D array of the columns in the order they appear in the parameter 'columns'
+def getData(filename: str, columns: list):
+    file = open(filename, 'r')
+    listforfile = []
+    data = []
+    for line in file:
+        if (line.startswith('#') == False):
+            listforfile += [line.split()]
+    [data.append([float(x[y]) for x in listforfile]) for y in columns]
+    file.close()
+    return data
+    
 starttime = time.time()
-x, data, stdv = pf.getData('D1_c_5.dat', [0, 1, 2])
+x, data, stdv = getData('D1_c_5.dat', [0, 1, 2])
 # stdv = np.multiply(data, 0.01)
 #  --------------------------
 
@@ -441,4 +456,5 @@ plt.close()
 #create_figure7()
 #create_figure8()
 #create_figure9()
+
 # -----------------------------------------------------------------------------------------------

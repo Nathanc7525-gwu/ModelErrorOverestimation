@@ -15,7 +15,8 @@ from scipy.optimize import minimize
 import corner
 from math import pi
 
-
+# just for plot resolution
+plt.rcParams['savefig.dpi'] = 300 
 # save to working directory
 savedir = "./"
 
@@ -486,4 +487,5 @@ plt.close()
 #create_figure9()
 
 # -----------------------------------------------------------------------------------------------
+
 
